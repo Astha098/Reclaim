@@ -1,0 +1,28 @@
+{
+  // This is the Python that already has fastapi/uvicorn/pydantic/httpx installed on
+  // this machine. If you later make a venv, point this at .venv/bin/python instead.
+  "python.defaultInterpreterPath": "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3",
+  "python.analysis.extraPaths": ["${workspaceFolder}"],
+  "python.analysis.typeCheckingMode": "basic",
+  "python.terminal.activateEnvironment": false,
+
+  // Keep the generated artefacts out of search results and the file tree. data/ is
+  // all disposable: sqlite files, the API fixture, and the 1.4MB render harness.
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true
+  },
+  "search.exclude": {
+    "data/**": true,
+    "dashboard/node_modules/**": true,
+    "eval/results/**": true
+  },
+  "files.associations": {
+    ".env.example": "dotenv"
+  },
+  "[python]": {
+    "editor.rulers": [88]
+  },
+  "[javascript]": { "editor.tabSize": 2 },
+  "[javascriptreact]": { "editor.tabSize": 2 }
+}

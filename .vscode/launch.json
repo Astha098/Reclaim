@@ -1,0 +1,49 @@
+{
+  // F5 to run. The interesting one is "backend (debuggable)": set a breakpoint in
+  // app/guardrails.py or app/policy.py, hit Seed 400 in the dashboard, and you can
+  // step through the agent deciding on a single real payment.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Reclaim: backend (debuggable)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      // No --reload here on purpose. The reloader runs the app in a child process,
+      // and the debugger stays attached to the parent — so breakpoints never bind.
+      // Use the "Reclaim: backend" task when you want hot reload instead.
+      "args": ["app.main:app", "--port", "8000"],
+      "cwd": "${workspaceFolder}",
+      "jinja": false,
+      "justMyCode": true,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Reclaim: smoke test",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/smoke.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Reclaim: API check",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/api_check.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Reclaim: eval (fast, 1 seed)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/eval/replay.py",
+      // The full run is 2000 payments × 5 seeds. This is the version you want when
+      // you are stepping through a policy rung rather than measuring one.
+      "args": ["--n", "300", "--seeds", "1"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

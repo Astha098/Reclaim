@@ -1,0 +1,11 @@
+{
+  // VS Code will offer to install these when you open the folder. Only the first two
+  // matter; the rest are conveniences.
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance",
+    "dbaeumer.vscode-eslint",
+    "humao.rest-client"
+  ]
+}

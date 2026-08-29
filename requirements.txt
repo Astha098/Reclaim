@@ -1,0 +1,13 @@
+# Lower bounds rather than hard pins: this runs on Python 3.14, where some
+# packages only have wheels in their very latest releases. Pin exactly before
+# deploying anything real.
+fastapi>=0.115
+uvicorn[standard]>=0.32
+pydantic>=2.9
+httpx>=0.27
+python-dotenv>=1.0
+
+# Optional. Without a key the classifier runs rules-only and messaging falls back
+# to templates — the whole system still works end to end, it just stops handling
+# the messy long tail of error strings.
+anthropic>=0.40

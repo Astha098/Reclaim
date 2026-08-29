@@ -1,0 +1,82 @@
+{
+  // Two servers, and the checks. Run any of these with ⇧⌘P → "Tasks: Run Task",
+  // or hit ⇧⌘B for the default (which starts both servers at once).
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Reclaim: backend",
+      "type": "shell",
+      "command": "python3 -m uvicorn app.main:app --reload --port 8000",
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": {
+        // Without this VS Code waits forever for the task to "finish" — a server
+        // never does. The pattern below tells it the task is up once uvicorn says so.
+        "pattern": { "regexp": "^.*$", "file": 1, "location": 2, "message": 3 },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*Started reloader.*",
+          "endsPattern": ".*Application startup complete.*"
+        }
+      },
+      "presentation": { "group": "servers", "panel": "dedicated", "reveal": "always" }
+    },
+    {
+      "label": "Reclaim: dashboard",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/dashboard" },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": { "regexp": "^.*$", "file": 1, "location": 2, "message": 3 },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*VITE.*",
+          "endsPattern": ".*ready in.*"
+        }
+      },
+      "presentation": { "group": "servers", "panel": "dedicated", "reveal": "always" }
+    },
+    {
+      "label": "Reclaim: run both",
+      "dependsOn": ["Reclaim: backend", "Reclaim: dashboard"],
+      "dependsOrder": "parallel",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Reclaim: install dashboard deps",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/dashboard" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Reclaim: smoke test",
+      "type": "shell",
+      "command": "python3 scripts/smoke.py",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Reclaim: API check",
+      "type": "shell",
+      "command": "python3 scripts/api_check.py",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Reclaim: eval (7-rung ablation)",
+      "type": "shell",
+      "command": "python3 eval/replay.py --json eval/results/latest.json",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Reclaim: all checks",
+      "dependsOn": ["Reclaim: smoke test", "Reclaim: API check"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    }
+  ]
+}
